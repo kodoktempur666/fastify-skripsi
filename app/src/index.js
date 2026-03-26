@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import dotenv from "dotenv";
 import pool from "./config/db.js";
 import checkoutRoutes from "./routes/checkout.route.js";
+import client from 'prom-client';
 
 dotenv.config();
 
@@ -12,9 +13,43 @@ const app = Fastify({
 
 const port = process.env.PORT || 3000;
 
+client.collectDefaultMetrics();
+
+const httpRequestDuration = new client.Histogram({
+  name: "http_request_duration_seconds",
+  help: "HTTP request duration",
+  labelNames: ["method", "route", "status_code"],
+});
+
+
 // register cors
 await app.register(cors, {
   origin: "*",
+});
+
+//  hook untuk mulai timer
+app.addHook("onRequest", async (request, reply) => {
+  request.startTime = process.hrtime();
+});
+
+//  hook untuk hitung durasi
+app.addHook("onResponse", async (request, reply) => {
+  const diff = process.hrtime(request.startTime);
+  const duration = diff[0] + diff[1] / 1e9;
+
+  httpRequestDuration
+    .labels(
+      request.method,
+      request.routerPath || request.url,
+      reply.statusCode
+    )
+    .observe(duration);
+});
+
+// endpoint metrics untuk Prometheus
+app.get("/metrics", async (request, reply) => {
+  reply.header("Content-Type", client.register.contentType);
+  return client.register.metrics();
 });
 
 // test route
