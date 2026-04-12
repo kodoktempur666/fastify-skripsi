@@ -1,4 +1,4 @@
-import pool from "../app/src/config/db.js";
+import pool from "../fastify/src/config/db.js";
 
 const createTable = async () => {
     const queryText = `

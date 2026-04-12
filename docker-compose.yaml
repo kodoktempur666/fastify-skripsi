@@ -1,7 +1,7 @@
 services:
-  app:
-    build: ./app
-    container_name: fastify_app
+  fastify-app:
+    build: ./fastify
+    container_name: fastify-app
     ports:
       - "3005:3005"
     network_mode: "host"
@@ -12,4 +12,25 @@ services:
       DB_USER: postgres
       DB_PASSWORD: psql
       DB_NAME: mydb
+
+  express-app:
+    build: ./express
+    container_name: express-app
+    ports:
+      - "3000:3000"
+    network_mode: "host"
+    environment:
+      PORT: 3000
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: psql
+      DB_NAME: mydb
+  
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    network_mode: "host"
+    ports:
+      - "9100:9100"
 
