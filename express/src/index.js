@@ -1,8 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import pool from "./config/db.js";
-import checkoutRoute from "./routes/checkout.route.js";
+import pool from "./db/pool.js";
+import authRoutes from './routes/auth.route.js';
+import productRoutes from './routes/product.route.js';
+import cartRoutes from './routes/cart.route.js';
+import orderRoutes from './routes/order.route.js';
+import reportRoutes from './routes/report.route.js';
 import client from "prom-client";
 
 // konfigurasi dotenv
@@ -48,7 +52,12 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(cors());
 
-app.use("/checkout", checkoutRoute);
+app.use('/api', authRoutes);
+app.use('/api', productRoutes);
+app.use('/api', cartRoutes);
+app.use('/api', orderRoutes);
+app.use('/api', reportRoutes);
+
 app.use(errorHandler);
 
 app.get("/", async (req, res) => {

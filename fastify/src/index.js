@@ -1,8 +1,12 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import dotenv from "dotenv";
-import pool from "./config/db.js";
-import checkoutRoutes from "./routes/checkout.route.js";
+import pool from "./db/pool.js";
+import authRoutes from './routes/auth.route.js';
+import productRoutes from './routes/product.route.js';
+import cartRoutes from './routes/cart.route.js';
+import orderRoutes from './routes/order.route.js';
+import reportRoutes from './routes/report.route.js';
 import client from 'prom-client';
 
 dotenv.config();
@@ -63,7 +67,11 @@ app.get("/", async (request, reply) => {
   }
 });
 
-app.register(checkoutRoutes)
+app.register(authRoutes);
+app.register(productRoutes);
+app.register(cartRoutes);
+app.register(orderRoutes);
+app.register(reportRoutes);
 
 const start = async () => {
   try {
