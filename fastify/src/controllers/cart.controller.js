@@ -4,10 +4,10 @@ import { getProductPrice } from '../models/product.model.js';
 import { handleResponse } from '../utils/response.js';
 
 export const createCartHandler = async (request, reply) => {
-  const userId = request.userId || null;
-  const sessionToken = request.headers['x-session-token'] || null;
+
+
   try {
-    const cart = await createCart(userId, sessionToken);
+    const cart = await createCart();
     handleResponse(reply, 201, 'Cart created', { cartId: cart.id });
   } catch (err) {
     reply.status(500).send({ status: 500, message: err.message });

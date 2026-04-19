@@ -7,10 +7,9 @@ const handleResponse = (res, status, message, data = null) => {
 };
 
 export const createCartHandler = async (req, res, next) => {
-  const userId = req.userId || null;
-  const sessionToken = req.headers['x-session-token'] || null;
+
   try {
-    const cart = await createCart(userId, sessionToken);
+    const cart = await createCart();
     handleResponse(res, 201, 'Cart created', { cartId: cart.id });
   } catch (err) {
     next(err);

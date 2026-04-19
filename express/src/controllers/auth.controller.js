@@ -42,13 +42,13 @@ export const register = async (req, res, next) => {
     const newUser = await createUser(email, passwordHash, name, false);
 
 
-    // try {
-    //   const emailResult = await mockSendEmail(newUser.email, newUser.name);
+    try {
+      const emailResult = await mockSendEmail(newUser.email, newUser.name);
 
-    //   console.log('Email sent:', emailResult);
-    // } catch (emailErr) {
-    //   console.error('Email failed:', emailErr.message);
-    // }
+      console.log('Email sent:', emailResult);
+    } catch (emailErr) {
+      console.error('Email failed:', emailErr.message);
+    }
 
     handleResponse(res, 201, 'User registered successfully', {
       id: newUser.id,

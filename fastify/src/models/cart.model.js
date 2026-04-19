@@ -1,11 +1,11 @@
 import pool from '../db/pool.js';
 
-export const createCart = async (userId, sessionToken) => {
+export const createCart = async () => {
   const result = await pool.query(
-    `INSERT INTO carts (user_id, session_token, status, created_at, updated_at)
-     VALUES ($1, $2, 'active', NOW(), NOW())
+    `INSERT INTO carts (status, created_at, updated_at)
+     VALUES ('active', NOW(), NOW())
      RETURNING id`,
-    [userId, sessionToken]
+
   );
   return result.rows[0];
 };

@@ -50,10 +50,10 @@ SELECT
   'Produk ' || i AS name,
   'Deskripsi untuk produk ' || i || ' ini adalah produk berkualitas tinggi.' AS description,
   (random() * 500000 + 10000)::int AS price,  -- harga 10.000 - 510.000
-  (random() * 10000)::int AS stock,              -- stok 0 - 200
-  (floor(random() * 40) + 11)::int AS category_id,  -- kategori id antara 11 s.d. 50 (asumsi child category)
+  (99999)::int AS stock,              -- stok 0 - 200
+  (1)::int AS category_id,  -- kategori id antara 11 s.d. 50 (asumsi child category)
   NOW() - (random() * 365 || ' days')::interval AS created_at
-FROM generate_series(1, 50) AS i;
+FROM generate_series(1, 2) AS i;
 
 -- Buat index untuk performa query (jika belum ada)
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category_id);
@@ -62,8 +62,8 @@ CREATE INDEX IF NOT EXISTS idx_products_name ON products(name);
 
 
 
--- SELECT
---   relname AS table_name,
---   n_live_tup AS row_count
--- FROM pg_stat_user_tables
--- ORDER BY relname;
+SELECT
+  relname AS table_name,
+  n_live_tup AS row_count
+FROM pg_stat_user_tables
+ORDER BY relname;
